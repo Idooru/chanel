@@ -76,11 +76,7 @@ $("#submit__button").on("click", function () {
     nickName,
   ] = formInfos.map(({ itemValue }) => itemValue);
 
-  const userAccount = JSON.parse(
-    localStorage.getItem("userAccount")
-      ? localStorage.getItem("userAccount")
-      : "[]"
-  );
+  const userAccount = JSON.parse(localStorage.getItem("userAccount")) || [];
 
   if (userAccount.find((user) => user.email === email)) {
     const $emailSpanEle = $("#user__email").parent().children(".error");
@@ -122,21 +118,14 @@ $("#submit__button").on("click", function () {
 
   if (!flag) return;
 
-  const id = userAccount.length ? (userAccount.length += 1) : 1;
   const tellHyphen = tell.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
 
-  userAccount.push({
-    id,
-    email,
-    password,
-    gender,
-    firstName,
-    lastName,
-    tellHyphen,
-    nickName,
-  });
+  const newUser = [
+    { email, password, gender, firstName, lastName, tellHyphen, nickName },
+    ...userAccount,
+  ];
 
-  localStorage.setItem("userAccount", JSON.stringify(userAccount));
+  localStorage.setItem("userAccount", JSON.stringify(newUser));
 
   location.href = "../login/login.html";
 
